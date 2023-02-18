@@ -3,6 +3,12 @@ class User extends BaseModel
 {
   const TABLE = 'users';
 
+  public function login($username,$password){
+    $sql = "SELECT * FROM users WHERE username = '$username' and password = '$password'";
+    $query = $this->_query($sql);
+    return $query;
+  }
+
   public function getUserRole($id)
   {
   }

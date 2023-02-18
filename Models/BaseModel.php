@@ -3,12 +3,14 @@
 class BaseModel extends Database
 {
     protected $connect;
-    public function __construct(){
+    public function __construct()
+    {
         // echo __METHOD__;
         $this->connect = $this->connect();
     }
 
-    public function all($table){
+    public function all($table)
+    {
 
         $sql = "SELECT * FROM ${table}";
         // die($sql);
@@ -17,38 +19,38 @@ class BaseModel extends Database
         // var_dump($query);
         $data = [];
 
-        while($row = mysqli_fetch_assoc($query)) {
+        while ($row = mysqli_fetch_assoc($query)) {
             array_push($data, $row);
         }
 
         return $data;
     }
 
-    public function find($table, $id){
-        if( $id != null ){
+    public function find($table, $id)
+    {
+        if ($id != null) {
 
             $sql = "SELECT * FROM ${table} WHERE ${table}.id = $id";
             // die($sql);
 
-           $query = $this->_query($sql);
-           // var_dump($query);
-           $data = [];
+            $query = $this->_query($sql);
+            // var_dump($query);
+            $data = [];
 
-           while($row = mysqli_fetch_assoc($query)) {
-               array_push($data, $row);
-           }
+            while ($row = mysqli_fetch_assoc($query)) {
+                array_push($data, $row);
+            }
 
-           return $data;
+            return $data;
         }
         return print('id not found');
-
-
     }
 
-    public function create($table, $data = []){
+    public function create($table, $data = [])
+    {
         $columns = implode(', ', array_keys($data));
         // chuyen value thanh dang string de luu vao db
-        $valueFinal = array_map(function($value) {
+        $valueFinal = array_map(function ($value) {
             return "'" . $value . "'";
         }, array_values($data));
         $valueFinal = implode(', ', $valueFinal);
@@ -62,13 +64,14 @@ class BaseModel extends Database
         return print('Created');
     }
 
-    public function update($table, $id, $data){
-        if( $id != null ){
+    public function update($table, $id, $data)
+    {
+        if ($id != null) {
             // print_r($data);
 
             $dataset = [];
             foreach ($data as $key => $value) {
-                array_push($dataset, "${key} = '".$value."'");
+                array_push($dataset, "${key} = '" . $value . "'");
             }
             $dataString = implode(', ', $dataset);
 
@@ -81,25 +84,24 @@ class BaseModel extends Database
             return print('Updated');
         }
         return print('id not found');
-
     }
 
-    public function delete($table, $id){
-        if( $id != null ){
+    public function delete($table, $id)
+    {
+        if ($id != null) {
             $sql = "DELETE FROM ${table} WHERE ${table}.id = $id";
             // die($sql);
 
-           $query = $this->_query($sql);
-           // var_dump($query);
+            $query = $this->_query($sql);
+            // var_dump($query);
 
-           return print("id ${id} in ${table} has been deleted");
+            return print("id ${id} in ${table} has been deleted");
         }
         return print('id not found');
-
     }
 
-    private function _query($sql){
+    public function _query($sql)
+    {
         return mysqli_query($this->connect, $sql);
     }
 }
-?>

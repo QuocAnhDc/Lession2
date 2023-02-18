@@ -1,5 +1,5 @@
 <?php
-
+session_start();
 define('URLROOT','http://localhost/');
 
 require './Core/Database.php';

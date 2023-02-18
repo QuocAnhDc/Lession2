@@ -1,18 +1,18 @@
 <div class="container my-3">
-  <form>
+  <form action="http://localhost/lession2/index.php?controller=user&&action=login" method="POST">
     <div class="form-group">
-      <label for="exampleInputEmail1">Username</label>
-      <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+      <label for="">Username</label>
+      <input type="text" name="pUsername" class="form-control">
       <!-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> -->
     </div>
     <div class="form-group">
-      <label for="exampleInputPassword1">Password</label>
-      <input type="password" class="form-control" id="exampleInputPassword1">
+      <label for="">Password</label>
+      <input type="password" name="pPassword" class="form-control">
     </div>
     <div class="form-group form-check">
-      <input type="checkbox" class="form-check-input" id="exampleCheck1">
-      <label class="form-check-label" for="exampleCheck1">Remember me</label>
+      <input type="checkbox" name ="remember" class="form-check-input" id="remember">
+      <label class="form-check-label" for="remember">Remember me</label>
     </div>
-    <button type="submit" class="btn btn-primary">Login</button>
+    <button type="submit" name="login" class="btn btn-primary">Login</button>
   </form>
 </div>
