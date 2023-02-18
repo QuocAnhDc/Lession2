@@ -1,56 +1,60 @@
 <?php
 
 
-class UserController   extends BaseController
+class UserController extends BaseController
 {
-    private $product;
+    private $user;
     public function __construct(){
         // ke thua tu controller
-        $this->loadModel('Product');
-        $this->product = new User();
+        $this->loadModel('User');
+        $this->user = new User();
     }
+
     public function index(){
-        $userRole = $this->product->getUserRole(1);
-
-        $users = [
-            [   
-                'id' => 1,
-                'name' => 'ip'
-            ],
-            [
-                'id' => 2,
-                'name' => 'and'
-            ],
-        ];
-
+        $users = $this->user->getAll();
         return $this->view('users.index', [
             'user' => $users,
-            'userRole' => $userRole,
+            //'userRole' => $userRole,
         ]);
     }
 
-    public function show(){
-        return $this->view('products.show');
+    public function login(){
+        return $this->view('pages.loginpage');
 
     }
 
-    public function create(){
-        return $this->view('products.create');
+    public function logout(){
+        return $this->view('users.logoutview');
     }
 
-    public function store(){
-        return $this->view('products.store');
+    public function register(){
+        $data = [
+            'username' => 'checktest',
+            'password' => 'checktest',
+        ];
+
+        //return $this->view('users.registerview');
+        $this->user->store($data);
     }
 
-    public function edit(){
-        return $this->view('products.edit');
+    public function editProfile($id){
+        $data = [
+            'username' => 'edittest',
+            'password' => 'edittest',
+        ];
+
+        //return $this->view('users.registerview');
+        $this->user->updateById($id,$data);
     }
 
-    public function update(){
-        return $this->view('products.update');
+    public function edit($id){
+        $users = $this->user->findById($id);
+        return $this->view('users.useredit',[
+            'user'=>$users,
+        ]);
     }
 
-    public function destroy(){
-        return $this->view('products.destroy');
+    public function destroy($id){
+        $this->user->deleteById($id);
     }
 }

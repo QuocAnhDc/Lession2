@@ -1,16 +1,16 @@
 <?php
 
+define('URLROOT','http://localhost/');
+
 require './Core/Database.php';
 require './Models/BaseModel.php';
 require './Controllers/BaseController.php';
-// ucfirts : Viet hoa chu dau trong userController
-// strtolower viet thuong con lai
-$controllerName = ucfirst((strtolower($_REQUEST['controller']) ?? 'Welcome') . 'Controller');
-$actionName = $_REQUEST['action'] ?? 'index';
-// echo $controllerName;
-require "./Controllers/${controllerName}.php";
-// require './Controllers/CategoryController.php';
-$controllerObject = new $controllerName;
-$controllerObject->$actionName();
 
-?>
+$controllerName = ucfirst((strtolower($_REQUEST['controller']) ?? 'user') . 'Controller');
+$actionName = $_REQUEST['action'] ?? 'index';
+$id = $_REQUEST['id'] ?? '';
+
+require "./Controllers/${controllerName}.php";
+
+$controllerObject = new $controllerName;
+$controllerObject->$actionName($id);

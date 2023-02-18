@@ -19,4 +19,11 @@ class Database
         return false;
     }
 }
+
+// $db = new Database();
+
+// if($db->connect()){
+//     echo "thanh cong";
+// }
+
 ?>
