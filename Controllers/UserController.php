@@ -18,18 +18,18 @@ class UserController extends BaseController
     {
         $users  = $this->user->getAll();
         $content = 'admin.index';
-        return $this->view('pages.adminpage',[
-            'user'=>$users,
-            'content'=>$content,
+        return $this->view('pages.adminpage', [
+            'user' => $users,
+            'content' => $content,
         ]);
     }
     public function userPage($id)
     {
         $content = 'user.index';
-        $user= $this->user->findById($id);
-        return $this->view('pages.userpage',[
-            'user'=>$user,
-            'content'=>$content,
+        $user = $this->user->findById($id);
+        return $this->view('pages.userpage', [
+            'user' => $user,
+            'content' => $content,
         ]);
     }
     public function registerPage()
@@ -39,21 +39,34 @@ class UserController extends BaseController
 
     public function login()
     {
+        session_start();
+
         // session_start();
         if (isset($_POST["login"])) {
             $username = $_POST["pUsername"];
             $password = $_POST["pPassword"];
+            $data = $this->user->login($username, $password);
+            $count = mysqli_num_rows($data);
+            $inforUser = $data->fetch_assoc();
         }
-        $data = $this->user->login($username, $password);
-        $count = mysqli_num_rows($data);
-        $inforUser = $data->fetch_assoc();
-
         if ($count >= 1) {
-            $user_id= $inforUser["id"];
-            if ($inforUser['role'] == 'ADMIN_ROLE') {
-                    header("Location: http://localhost/lession2/index.php?controller=user&&action=adminPage");
+            $_SESSION["userid"] = $inforUser["id"];
+            $user_id = $inforUser["id"];
+            if (!empty($_POST["remember"])) {
+                setcookie("username", $_POST["pUsername"], time() + (6 * 60 * 60));
+                setcookie("password", $_POST["pPassword"], time() + (6 * 60 * 60));
             } else {
-                header('Location: http://localhost/lession2/index.php?controller=user&&action=userPage&id='.$user_id);
+                if (isset($_COOKIE["username"])) {
+                    setcookie("username", "");
+                }
+                if (isset($_COOKIE["password"])) {
+                    setcookie("password", "");
+                }
+            }
+            if ($inforUser['role'] == 'ADMIN_ROLE') {
+                header("Location: http://localhost/lession2/index.php?controller=user&&action=adminPage");
+            } else {
+                header('Location: http://localhost/lession2/index.php?controller=user&&action=userPage&id=' . $user_id);
             }
         } else {
         }
@@ -61,6 +74,10 @@ class UserController extends BaseController
 
     public function logout()
     {
+        session_start();
+        $_SESSION["userid"] = "";
+        session_destroy();
+        header("Location: http://localhost/lession2/index.php?controller=user&&action=indexPage");
     }
 
     public function register()
@@ -89,11 +106,11 @@ class UserController extends BaseController
 
     public function update()
     {
-        if(isset($_POST['update_user'])){
+        if (isset($_POST['update_user'])) {
             $uUserName = $_POST['uUsername'];
             $uPassword = $_POST['uPassword'];
             $uEmail = $_POST['uEmail'];
-            $uRole= $_POST['uRole'];
+            $uRole = $_POST['uRole'];
             $uId = $_POST['uId'];
 
             $data = [
@@ -101,7 +118,7 @@ class UserController extends BaseController
                 'password' =>  $uPassword,
                 'email' =>  $uEmail,
                 'role' => $uRole
-            ];   
+            ];
         }
 
         $this->user->updateById($uId, $data);
@@ -111,7 +128,7 @@ class UserController extends BaseController
 
     public function updateInfor()
     {
-        if(isset($_POST['update_userInfor'])){
+        if (isset($_POST['update_userInfor'])) {
             $uUserName = $_POST['uUsername'];
             $uPassword = $_POST['uPassword'];
             $uEmail = $_POST['uEmail'];
@@ -121,21 +138,21 @@ class UserController extends BaseController
                 'username' => $uUserName,
                 'password' =>  $uPassword,
                 'email' =>  $uEmail,
-            ];   
+            ];
         }
 
         $this->user->updateById($uId, $data);
         // header("Location: http://localhost/?controller=product&action=index");
-        header('Location: http://localhost/lession2/index.php?controller=user&&action=userPage&id='.$uId);
+        header('Location: http://localhost/lession2/index.php?controller=user&&action=userPage&id=' . $uId);
     }
 
-    public function show($id){
+    public function show($id)
+    {
         $users = $this->user->findById($id);
         $users_arr = [];
         $users_arr_final = [];
-        foreach ($users as $key => $valueP)
-        {
-            
+        foreach ($users as $key => $valueP) {
+
             // echo $valueP;
             array_push($users_arr, $valueP);
             array_push($users_arr_final, $users_arr);
@@ -144,12 +161,11 @@ class UserController extends BaseController
 
             echo json_encode($users_arr_final);
         }
-      
     }
 
     public function destroy()
     {
-        if(isset($_POST['delete_user'])){
+        if (isset($_POST['delete_user'])) {
             $pId = $_POST['uId'];
         }
         $this->user->deleteById($pId);
