@@ -6,31 +6,30 @@ class UserController extends BaseController
     private $user;
     public function __construct()
     {
-        // ke thua tu controller
         $this->loadModel('User');
         $this->user = new User();
     }
 
-    public function index()
+    public function indexPage()
     {
-        // $users = $this->user->getAll();
-        // return $this->view('users.index', [
-        //     'user' => $users,
-        //     //'userRole' => $userRole,
-        // ]);
-        if ($_SESSION["userid"]) {
-            return $this->view('users.show');
-        }
-        
         return $this->view('pages.loginpage');
     }
-    public function admin()
+    public function adminPage()
     {
-        return $this->view('pages.adminpage');
+        $users  = $this->user->getAll();
+        $content = 'admin.index';
+        return $this->view('pages.adminpage',[
+            'user'=>$users,
+            'content'=>$content,
+        ]);
     }
-    public function user()
+    public function userPage()
     {
         return $this->view('pages.userpage');
+    }
+    public function registerPage()
+    {
+        return $this->view('pages.register');
     }
 
     public function login()
@@ -45,73 +44,93 @@ class UserController extends BaseController
 
         if ($count >= 1) {
             $_SESSION["userid"] = $inforUser["id"];
-
-            if (!empty($_POST["remember"])) {
-
-                setcookie("user_login", $_POST["username"], time() + (60*60*6));
-
-                setcookie("userpassword", $_POST["password"], time() + (60*60*6));
-            } else {
-
-                if (isset($_COOKIE["user_login"])) {
-
-                    setcookie("user_login", "");
-                }
-
-                if (isset($_COOKIE["userpassword"])) {
-
-                    setcookie("userpassword", "");
-                }
-            }
+            $id = $inforUser["id"];
             if ($inforUser['role'] == 'ADMIN_ROLE') {
-                header("Location: http://localhost/lession2/index.php?controller=user&&action=admin");
+                    header("Location: http://localhost/lession2/index.php?controller=user&&action=adminPage");
             } else {
-                header("Location: http://localhost/lession2/index.php?controller=user&&action=user");
-            } //setcookie("success", "Đăng nhập thành công!", time()+1, "/","", 0);
+                $users = $this->user->findById($id);
+                return $this->view('pages.userpage', [
+                    'user' => $users,
+                ]);
+            }
         } else {
-            //header("location:index.php");
-            //setcookie("error", "Đăng nhập không thành công!", time()+1, "/","", 0);
         }
-        // return $this->view('pages.loginpage');
     }
 
     public function logout()
     {
-        return $this->view('users.logoutview');
     }
 
     public function register()
     {
-        $data = [
-            'username' => 'checktest',
-            'password' => 'checktest',
-        ];
+        try {
+            if (isset($_POST['register'])) {
+                $username = $_POST['pUsername'];
+                $password = $_POST['pPassword'];
+                $email = $_POST['pEmail'];
 
-        //return $this->view('users.registerview');
-        $this->user->store($data);
+                $data = [
+                    'username' => $username,
+                    'password' =>  $password,
+                    'email' =>  $email
+                ];
+            }
+
+            $this->user->store($data);
+            $message = 'success';
+            return $this->view('pages.register');
+            //header("Location: http://localhost/index.php?controller=product&&action=registerPage&&message=success");
+        } catch (Exception $e) {
+            return $this->view('pages.register');
+        }
     }
 
-    public function editProfile($id)
+    public function update()
     {
-        $data = [
-            'username' => 'edittest',
-            'password' => 'edittest',
-        ];
+        if(isset($_POST['update_user'])){
+            $uUserName = $_POST['uUsername'];
+            $uPassword = $_POST['uPassword'];
+            $uEmail = $_POST['uEmail'];
+            $uRole= $_POST['uRole'];
+            $uId = $_POST['uId'];
 
-        //return $this->view('users.registerview');
-        $this->user->updateById($id, $data);
+            $data = [
+                'username' => $uUserName,
+                'password' =>  $uPassword,
+                'email' =>  $uEmail,
+                'role' => $uRole
+            ];   
+        }
+
+        $this->user->updateById($uId, $data);
+        // header("Location: http://localhost/?controller=product&action=index");
+        header("Location: http://localhost/lession2/index.php?controller=user&&action=adminPage");
     }
 
-    public function edit($id)
-    {
+    public function show($id){
         $users = $this->user->findById($id);
-        return $this->view('users.useredit', [
-            'user' => $users,
-        ]);
+        $users_arr = [];
+        $users_arr_final = [];
+        foreach ($users as $key => $valueP)
+        {
+            
+            // echo $valueP;
+            array_push($users_arr, $valueP);
+            array_push($users_arr_final, $users_arr);
+
+            header('Content-Type: application/json');
+
+            echo json_encode($users_arr_final);
+        }
+      
     }
 
-    public function destroy($id)
+    public function destroy()
     {
-        $this->user->deleteById($id);
+        if(isset($_POST['delete_user'])){
+            $pId = $_POST['uId'];
+        }
+        $this->user->deleteById($pId);
+        header("Location: http://localhost/lession2/index.php?controller=user&&action=adminPage");
     }
 }

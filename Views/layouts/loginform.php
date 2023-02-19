@@ -1,5 +1,5 @@
 <div class="container my-3">
-  <form action="http://localhost/lession2/index.php?controller=user&&action=login" method="POST">
+  <form action="http://localhost/lession2/index.php?controller=user&action=login" method="POST">
     <div class="form-group">
       <label for="">Username</label>
       <input type="text" name="pUsername" class="form-control">
@@ -14,5 +14,6 @@
       <label class="form-check-label" for="remember">Remember me</label>
     </div>
     <button type="submit" name="login" class="btn btn-primary">Login</button>
+    <p>Not have a account <span><a href="http://localhost/lession2/index.php?controller=user&&action=registerPage">Register here!</a></span></p>
   </form>
 </div>

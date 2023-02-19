@@ -37,5 +37,3 @@ class BaseController
         return require ($modelPath);
     }
 }
-
-?>

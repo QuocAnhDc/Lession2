@@ -5,20 +5,11 @@ class User extends BaseModel
 
   public function login($username,$password){
     $sql = "SELECT * FROM users WHERE username = '$username' and password = '$password'";
-    $query = $this->_query($sql);
+    $query = $this->cusquery($sql);
     return $query;
-  }
-
-  public function getUserRole($id)
-  {
-  }
-
-  public function findUserById($id)
-  {
   }
   public function getAll()
   {
-    //    die($table);
     return $this->all(self::TABLE);
   }
   public function findById($id)

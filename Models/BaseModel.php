@@ -45,23 +45,26 @@ class BaseModel extends Database
         }
         return print('id not found');
     }
-
     public function create($table, $data = [])
     {
-        $columns = implode(', ', array_keys($data));
-        // chuyen value thanh dang string de luu vao db
-        $valueFinal = array_map(function ($value) {
-            return "'" . $value . "'";
-        }, array_values($data));
-        $valueFinal = implode(', ', $valueFinal);
-        // print_r($valueFinal);
-        $sql = "INSERT INTO ${table} (${columns}) VALUES (${valueFinal})";
-        //  die($sql);
+        if ($data != null) {
+            $columns = implode(', ', array_keys($data));
+            // chuyen value thanh dang string de luu vao db
+            $valueFinal = array_map(function ($value) {
+                return "'" . $value . "'";
+            }, array_values($data));
+            $valueFinal = implode(', ', $valueFinal);
+            // print_r($valueFinal);
+            $sql = "INSERT INTO ${table} (${columns}) VALUES (${valueFinal})";
+            //  die($sql);
 
-        $this->_query($sql);
-        // var_dump($query);
+            $this->_query($sql);
+            // var_dump($query);
 
-        return print('Created');
+            return print('Created');
+        }
+
+        return print('Not Created');
     }
 
     public function update($table, $id, $data)
@@ -100,7 +103,23 @@ class BaseModel extends Database
         return print('id not found');
     }
 
-    public function _query($sql)
+    public function getByQuery($sql)
+    {
+        $query = $this->_query($sql);
+        $data = [];
+        while ($row = mysqli_fetch_assoc($query)) {
+            array_push($data, $row);
+        }
+
+        return $data;
+    }
+
+    public function cusquery($sql)
+    {
+        return mysqli_query($this->connect, $sql);
+    }
+
+    private function _query($sql)
     {
         return mysqli_query($this->connect, $sql);
     }

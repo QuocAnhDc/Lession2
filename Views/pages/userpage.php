@@ -15,9 +15,14 @@
 </head>
 
 <body>
-  <?php $this->view('layouts.header') ?>
-  <h1>User page</h1>
-  <?php $this->view('layouts.footer') ?>
+  <?php
+  $this->view('layouts.header');
+  // var_dump($user);
+  $this->view($content, [
+    'user' => $user,
+  ]);
+  $this->view('layouts.footer');
+  ?>
 
 
 </body>
