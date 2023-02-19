@@ -1,8 +1,10 @@
 <?php
 class User extends BaseModel
 {
+  // ten data table
   const TABLE = 'users';
 
+  // check login
   public function login($username,$password){
     $sql = "SELECT * FROM users WHERE username = '$username' and password = '$password'";
     $query = $this->cusquery($sql);

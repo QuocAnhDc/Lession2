@@ -17,7 +17,6 @@
 <body>
   <?php
   $this->view('layouts.headerPage');
-  // var_dump($user);
   $this->view($content, [
     'user' => $user,
   ]);

@@ -5,18 +5,15 @@ class BaseModel extends Database
     protected $connect;
     public function __construct()
     {
-        // echo __METHOD__;
         $this->connect = $this->connect();
     }
 
+    //lay tat ca du lieu 
     public function all($table)
     {
 
         $sql = "SELECT * FROM ${table}";
-        // die($sql);
-
         $query = $this->_query($sql);
-        // var_dump($query);
         $data = [];
 
         while ($row = mysqli_fetch_assoc($query)) {
@@ -26,15 +23,13 @@ class BaseModel extends Database
         return $data;
     }
 
+    //lay du lieu theo id 
     public function find($table, $id)
     {
         if ($id != null) {
 
             $sql = "SELECT * FROM ${table} WHERE ${table}.id = $id";
-            // die($sql);
-
             $query = $this->_query($sql);
-            // var_dump($query);
             $data = [];
 
             while ($row = mysqli_fetch_assoc($query)) {
@@ -45,23 +40,23 @@ class BaseModel extends Database
         }
         return print('id not found');
     }
+
+    //tao moi du lieu vao table
     public function create($table, $data = [])
     {
         if ($data != null) {
+            // chuyen data truyen vao dang string der import vao database
             $columns = implode(', ', array_keys($data));
-            // chuyen value thanh dang string de luu vao db
             $valueFinal = array_map(function ($value) {
                 return "'" . $value . "'";
             }, array_values($data));
             $valueFinal = implode(', ', $valueFinal);
             // print_r($valueFinal);
             $sql = "INSERT INTO ${table} (${columns}) VALUES (${valueFinal})";
-            //  die($sql);
 
             $this->_query($sql);
-            // var_dump($query);
 
-            return print('Created');
+            return print('Create Success');
         }
 
         return print('Not Created');
@@ -70,8 +65,6 @@ class BaseModel extends Database
     public function update($table, $id, $data)
     {
         if ($id != null) {
-            // print_r($data);
-
             $dataset = [];
             foreach ($data as $key => $value) {
                 array_push($dataset, "${key} = '" . $value . "'");
@@ -79,11 +72,7 @@ class BaseModel extends Database
             $dataString = implode(', ', $dataset);
 
             $sql = "UPDATE ${table} SET ${dataString} WHERE id=$id";
-            //  die($sql);
-
             $this->_query($sql);
-            // var_dump($query);
-
             return print('Updated');
         }
         return print('id not found');
@@ -93,11 +82,7 @@ class BaseModel extends Database
     {
         if ($id != null) {
             $sql = "DELETE FROM ${table} WHERE ${table}.id = $id";
-            // die($sql);
-
             $query = $this->_query($sql);
-            // var_dump($query);
-
             return print("id ${id} in ${table} has been deleted");
         }
         return print('id not found');
@@ -110,7 +95,6 @@ class BaseModel extends Database
         while ($row = mysqli_fetch_assoc($query)) {
             array_push($data, $row);
         }
-
         return $data;
     }
 

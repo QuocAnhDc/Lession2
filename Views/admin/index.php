@@ -119,7 +119,6 @@
     <div class="col-md-12">
       <div class="mt-5 mb-3 clearfix">
         <h2 class="pull-left">All User</h2>
-        <!-- <a href="create.php" class="btn btn-success pull-right"><i class="fa fa-plus"></i> Add New Product</a> -->
       </div>
 
       <?php
@@ -128,7 +127,7 @@
         echo '<table class="table table-bordered table-striped">';
         echo "<thead>";
         echo "<tr>";
-        echo "<th>#</th>";
+        echo "<th>ID</th>";
         echo "<th>USERNAME</th>";
         echo "<th>PASSWORD</th>";
         echo "<th>EMAIL</th>";
@@ -175,7 +174,6 @@
   $(document).ready(function() {
     $('.view_btn').click(function(e) {
       e.preventDefault();
-      // $('#viewProductModal').modal('show');
       var user_id = $(this).closest('tr').find('.user_id').text();
       console.log(user_id);
       $.ajax({
@@ -199,7 +197,7 @@
     // edit user
     $('.edit_btn').click(function(e) {
       e.preventDefault();
-      // $('#viewProductModal').modal('show');
+
       var user_id = $(this).closest('tr').find('.user_id').text();
       console.log(user_id);
       $.ajax({

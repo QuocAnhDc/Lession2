@@ -10,6 +10,7 @@ class UserController extends BaseController
         $this->user = new User();
     }
 
+    // url cac pages
     public function indexPage()
     {
         return $this->view('pages.loginpage');
@@ -37,6 +38,7 @@ class UserController extends BaseController
         return $this->view('pages.register');
     }
 
+    // function thuc hien cac chuc nang login, logout, register, view, update, delete user
     public function login()
     {
         session_start();
@@ -96,11 +98,9 @@ class UserController extends BaseController
             }
 
             $this->user->store($data);
-            $message = 'success';
-            return $this->view('pages.register');
-            //header("Location: http://localhost/index.php?controller=product&&action=registerPage&&message=success");
+            header("Location: http://localhost/lession2/index.php?controller=user&&action=registerPage&message=success");
         } catch (Exception $e) {
-            return $this->view('pages.register');
+            header("Location: http://localhost/lession2/index.php?controller=user&&action=registerPage&message=fail");
         }
     }
 
@@ -122,7 +122,6 @@ class UserController extends BaseController
         }
 
         $this->user->updateById($uId, $data);
-        // header("Location: http://localhost/?controller=product&action=index");
         header("Location: http://localhost/lession2/index.php?controller=user&&action=adminPage");
     }
 
@@ -142,7 +141,6 @@ class UserController extends BaseController
         }
 
         $this->user->updateById($uId, $data);
-        // header("Location: http://localhost/?controller=product&action=index");
         header('Location: http://localhost/lession2/index.php?controller=user&&action=userPage&id=' . $uId);
     }
 

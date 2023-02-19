@@ -2,12 +2,13 @@
 
 class Database
 {
+    //config cac thong tin cua database
     const HOST = '127.0.0.1:3307';
     const USERNAME = 'root';
     const PASSWORD = '123456';
     const DB_NAME = 'lession2';
 
-
+    //ket noi databse
     public function connect(){
         $connect = mysqli_connect(self::HOST, self::USERNAME,
             self::PASSWORD, self::DB_NAME);

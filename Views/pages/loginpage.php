@@ -17,7 +17,6 @@
 <body>
     <?php
         $this->view('layouts.header');
-        // var_dump($product);
         $this->view('layouts.loginform');
         $this->view('layouts.footer');
     ?>
