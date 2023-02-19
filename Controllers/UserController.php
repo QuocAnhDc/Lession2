@@ -23,9 +23,14 @@ class UserController extends BaseController
             'content'=>$content,
         ]);
     }
-    public function userPage()
+    public function userPage($id)
     {
-        return $this->view('pages.userpage');
+        $content = 'user.index';
+        $user= $this->user->findById($id);
+        return $this->view('pages.userpage',[
+            'user'=>$user,
+            'content'=>$content,
+        ]);
     }
     public function registerPage()
     {
@@ -34,6 +39,7 @@ class UserController extends BaseController
 
     public function login()
     {
+        // session_start();
         if (isset($_POST["login"])) {
             $username = $_POST["pUsername"];
             $password = $_POST["pPassword"];
@@ -43,15 +49,11 @@ class UserController extends BaseController
         $inforUser = $data->fetch_assoc();
 
         if ($count >= 1) {
-            $_SESSION["userid"] = $inforUser["id"];
-            $id = $inforUser["id"];
+            $user_id= $inforUser["id"];
             if ($inforUser['role'] == 'ADMIN_ROLE') {
                     header("Location: http://localhost/lession2/index.php?controller=user&&action=adminPage");
             } else {
-                $users = $this->user->findById($id);
-                return $this->view('pages.userpage', [
-                    'user' => $users,
-                ]);
+                header('Location: http://localhost/lession2/index.php?controller=user&&action=userPage&id='.$user_id);
             }
         } else {
         }
@@ -105,6 +107,26 @@ class UserController extends BaseController
         $this->user->updateById($uId, $data);
         // header("Location: http://localhost/?controller=product&action=index");
         header("Location: http://localhost/lession2/index.php?controller=user&&action=adminPage");
+    }
+
+    public function updateInfor()
+    {
+        if(isset($_POST['update_userInfor'])){
+            $uUserName = $_POST['uUsername'];
+            $uPassword = $_POST['uPassword'];
+            $uEmail = $_POST['uEmail'];
+            $uId = $_POST['uId'];
+
+            $data = [
+                'username' => $uUserName,
+                'password' =>  $uPassword,
+                'email' =>  $uEmail,
+            ];   
+        }
+
+        $this->user->updateById($uId, $data);
+        // header("Location: http://localhost/?controller=product&action=index");
+        header('Location: http://localhost/lession2/index.php?controller=user&&action=userPage&id='.$uId);
     }
 
     public function show($id){
