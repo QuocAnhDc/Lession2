@@ -5,8 +5,8 @@ class User extends BaseModel
   const TABLE = 'users';
 
   // check login
-  public function login($username,$password){
-    $sql = "SELECT * FROM users WHERE username = '$username' and password = '$password'";
+  public function login($email,$password){
+    $sql = "SELECT * FROM users WHERE email = '$email' and password = '$password'";
     $query = $this->cusquery($sql);
     return $query;
   }

@@ -1,9 +1,9 @@
 <div class="container my-3">
   <form action="http://localhost/lession2/index.php?controller=user&action=login" method="POST">
     <div class="form-group">
-      <label for="">Username</label>
-      <input type="text" name="pUsername" value="<?php if (isset($_COOKIE["username"])) {
-                                                    echo $_COOKIE["username"];
+      <label for="">Email</label>
+      <input type="text" name="pEmail" value="<?php if (isset($_COOKIE["email"])) {
+                                                    echo $_COOKIE["email"];
                                                   } ?>" class="form-control">
       <!-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> -->
     </div>

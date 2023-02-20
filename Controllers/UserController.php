@@ -45,21 +45,22 @@ class UserController extends BaseController
 
         // session_start();
         if (isset($_POST["login"])) {
-            $username = $_POST["pUsername"];
+            $email = $_POST["pEmail"];
             $password = $_POST["pPassword"];
-            $data = $this->user->login($username, $password);
+            $data = $this->user->login($email, $password);
             $count = mysqli_num_rows($data);
             $inforUser = $data->fetch_assoc();
         }
         if ($count >= 1) {
             $_SESSION["userid"] = $inforUser["id"];
+            setcookie("usernameLogin", $inforUser["username"], time() + (365*24 * 60 * 60));
             $user_id = $inforUser["id"];
             if (!empty($_POST["remember"])) {
-                setcookie("username", $_POST["pUsername"], time() + (6 * 60 * 60));
+                setcookie("email", $_POST["pEmail"], time() + (6 * 60 * 60));
                 setcookie("password", $_POST["pPassword"], time() + (6 * 60 * 60));
             } else {
-                if (isset($_COOKIE["username"])) {
-                    setcookie("username", "");
+                if (isset($_COOKIE["email"])) {
+                    setcookie("email", "");
                 }
                 if (isset($_COOKIE["password"])) {
                     setcookie("password", "");

@@ -41,8 +41,8 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`id`, `username`, `password`, `email`, `role`) VALUES
 (1, 'admin', 'admin', 'admin@admin.com', 'ADMIN_ROLE'),
-(3, 'user', 'user', 'user@user.commmm', 'USER_ROLE'),
-(18, 'test', 'test', 'tes@test.com', 'USER_ROLE');
+(3, 'user', 'user', 'user@user.com', 'USER_ROLE'),
+(18, 'test', 'test', 'test@test.com', 'USER_ROLE');
 
 --
 -- Chỉ mục cho các bảng đã đổ
